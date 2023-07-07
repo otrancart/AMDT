@@ -10,6 +10,9 @@ Welcome to Aristarchus the MarineDataTrawler's documentation!
    :maxdepth: 2
    :caption: Contents:
 
+   Home <self>
+   modules
+
 
 
 Indices and tables
