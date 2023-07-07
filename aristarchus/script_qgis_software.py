@@ -19,40 +19,41 @@ from qgis.core import (
     QgsProcessingFeedback
 )
 
-with open("./options.json","r") as f:
-    json_dict = json.load(f)
-# Supply path to qgis install location
-QgsApplication.setPrefixPath(json_dict["qgis_path"], True)
-# Append the path where processing plugin can be found
-sys.path.append(json_dict["proc_path"])
+if '/docs' not in os.getcwd():
+    with open("./options.json","r") as f:
+            json_dict = json.load(f)
+    # Supply path to qgis install location
+    QgsApplication.setPrefixPath(json_dict["qgis_path"], True)
+    # Append the path where processing plugin can be found
+    sys.path.append(json_dict["proc_path"])
 
-# Create a reference to the QgsApplication.  
-# Setting the second argument to False disables the GUI.
-qgs = QgsApplication([], False)
-
-
-from qgis import processing
-
-from qgis.analysis import QgsZonalStatistics
-from qgis.analysis import QgsNativeAlgorithms
+    # Create a reference to the QgsApplication.  
+    # Setting the second argument to False disables the GUI.
+    qgs = QgsApplication([], False)
 
 
-from osgeo import gdal
-gdal.PushErrorHandler('CPLQuietErrorHandler')
-# hide ERROR 6: The PNG driver does not support update access to existing datasets.
+    from qgis import processing
+
+    from qgis.analysis import QgsZonalStatistics
+    from qgis.analysis import QgsNativeAlgorithms
 
 
-### START QGIS ###
-qgs.initQgis()
+    from osgeo import gdal
+    gdal.PushErrorHandler('CPLQuietErrorHandler')
+    # hide ERROR 6: The PNG driver does not support update access to existing datasets.
 
-sys.path.append(json_dict["proc_path"])
-    
-import processing 
-from processing.core.Processing import Processing
-Processing.initialize()
-QgsApplication.processingRegistry().addProvider(QgsNativeAlgorithms())
 
-# qgs.exitQgis()
+    ### START QGIS ###
+    qgs.initQgis()
+
+    sys.path.append(json_dict["proc_path"])
+        
+    import processing 
+    from processing.core.Processing import Processing
+    Processing.initialize()
+    QgsApplication.processingRegistry().addProvider(QgsNativeAlgorithms())
+
+    # qgs.exitQgis()
 
 
 ##################

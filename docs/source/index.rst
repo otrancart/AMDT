@@ -1,16 +1,14 @@
-.. Aristarchus the MarineDataTrawler documentation master file, created by
-   sphinx-quickstart on Fri Jul  7 11:03:36 2023.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
-
 Welcome to Aristarchus the MarineDataTrawler's documentation!
 =============================================================
+
+Github page: https://github.com/otrancart/AMDT
 
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
 
    Home <self>
+   filenames
    modules
 
 
