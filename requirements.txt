@@ -1,11 +1,9 @@
 matplotlib.pyplot
 pandas
 motuclient==1.8.4
-qgis
-qgis.core
 xarray
 rioxarray
-bs4
+beautifulsoup4
 regex
 statsmodels
 cftime
