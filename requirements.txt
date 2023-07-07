@@ -1,6 +1,6 @@
 Sphinx==6.2.1
 sphinx-rtd-theme==1.2.2
-matplotlib.pyplot>=3.5.1
+matplotlib>=3.5.1
 pandas>=2.0.0
 motuclient==1.8.4
 xarray>=2023.1.0
