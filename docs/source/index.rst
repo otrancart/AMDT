@@ -9,12 +9,6 @@ Welcome to Aristarchus the MarineDataTrawler's documentation!
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
-   correlation_sightings
-   general_function
-   interface
-   script_motuclient
-   script_qgis_software
-   seasonnal_adjustment
 
 
 
