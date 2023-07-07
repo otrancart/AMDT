@@ -1,0 +1,17 @@
+matplotlib.pyplot
+pandas
+motuclient==1.8.4
+qgis
+qgis.core
+xarray
+rioxarray
+bs4
+regex
+statsmodels
+cftime
+streamlit
+streamlit-option-menu<=0.3.5
+pydeck
+plotly==5.14.1
+mpld3
+pymannkendall

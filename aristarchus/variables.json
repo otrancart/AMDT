@@ -1,0 +1,342 @@
+{
+    "so": [
+        "Salinity",
+        "0.001"
+    ],
+    "bottomT": [
+        "sea_water_potential_temperature_at_sea_floor",
+        "degrees_C"
+    ],
+    "uo": [
+        "Eastward ocean current velocity",
+        "m s-1"
+    ],
+    "thetao": [
+        "Potential temperature",
+        "degrees_C"
+    ],
+    "vo": [
+        "Northward ocean current velocity",
+        "m s-1"
+    ],
+    "nppv": [
+        "Net Primary Production in sea water",
+        "mg m-3 day-1"
+    ],
+    "o2": [
+        "Mole concentration of Dissolved Molecular Oxygen in sea water",
+        "mmol m-3"
+    ],
+    "analysed_sst": [
+        "Analysed sea surface temperature",
+        "kelvin"
+    ],
+    "analysis_error": [
+        "Estimated error standard deviation of analysed sst",
+        "kelvin"
+    ],
+    "mask": [
+        "Sea/land/lake/ice field composite mask",
+        "1"
+    ],
+    "sea_ice_fraction": [
+        "Sea ice area fraction",
+        "1"
+    ],
+    "ADG443": [
+        "Absorption due to gelbstoff and detrital material at 443 nm, QAA algorithm",
+        "m^-1"
+    ],
+    "CHL": [
+        "Chlorophyll a concentration",
+        "milligram m^-3"
+    ],
+    "QI_RRS412_5": [
+        "Quality Index for OLCI Remote Sensing Reflectance at rrs412 5",
+        "1"
+    ],
+    "QI_RRS442_5": [
+        "Quality Index for OLCI Remote Sensing Reflectance at rrs442 5",
+        "1"
+    ],
+    "APH443": [
+        "Absorption due to phytoplankton at 443 nm, QAA algorithm",
+        "m^-1"
+    ],
+    "BBP443": [
+        "Particulate back-scattering coefficient at 443 nm, QAA algorithm",
+        "m^-1"
+    ],
+    "QI_ADG443": [
+        "Quality Index for gelbstoff and detrital material absorption at 443 nm",
+        "1"
+    ],
+    "QI_APH443": [
+        "Quality Index for phytoplankton absorption at 443 nm",
+        "1"
+    ],
+    "QI_BBP443": [
+        "Quality Index for particulate back-scattering coefficient at 443 nm",
+        "1"
+    ],
+    "SENSORMASK": [
+        "Sensor Mask for gelbstoff and detrital material absorption at 443 nm",
+        "1"
+    ],
+    "CRYPTO": [
+        "Multi-sensor Cryptophyte Chlorophyll a concentration",
+        "milligram m^-3"
+    ],
+    "DIATO": [
+        "Multi-sensor Diatom Chlorophyll a concentration",
+        "milligram m^-3"
+    ],
+    "DINO": [
+        "Multi-sensor Dinophyte Chlorophyll a concentration",
+        "milligram m^-3"
+    ],
+    "QI_RRS412": [
+        "Quality Index for Merged Remote Sensing Reflectance at 412nm",
+        "1"
+    ],
+    "QI_RRS443": [
+        "Quality Index for Merged Remote Sensing Reflectance at 443nm",
+        "1"
+    ],
+    "QI_RRS490": [
+        "Quality Index for Merged Remote Sensing Reflectance at 490nm",
+        "1"
+    ],
+    "QI_RRS510": [
+        "Quality Index for Merged Remote Sensing Reflectance at 510nm",
+        "1"
+    ],
+    "QI_RRS555": [
+        "Quality Index for Merged Remote Sensing Reflectance at 555nm",
+        "1"
+    ],
+    "KD490": [
+        "Multi-sensor Diffuse Attenuation Coefficient at 490nm",
+        "m^-1"
+    ],
+    "QI_KD490": [
+        "Quality Index for Multi-sensor Diffuse Attenuation Coefficient at 490nm",
+        "1"
+    ],
+    "GREEN": [
+        "Multi-sensor Green algae and Prochlorophyte Chlorophyll a concentration",
+        "milligram m^-3"
+    ],
+    "HAPTO": [
+        "Multi-sensor Haptophyte Chlorophyll a concentration",
+        "milligram m^-3"
+    ],
+    "QI_CHL": [
+        "Quality Index for OLCI Chlorophyll a concentration",
+        "1"
+    ],
+    "QI_RRS670": [
+        "Quality Index for Merged Remote Sensing Reflectance at 670nm",
+        "1"
+    ],
+    "QI_RRS560": [
+        "Quality Index for OLCI Remote Sensing Reflectance at rrs560",
+        "1"
+    ],
+    "QI_RRS673_75": [
+        "Quality Index for OLCI Remote Sensing Reflectance at rrs673 75",
+        "1"
+    ],
+    "RRS412": [
+        "Multi-sensor Remote Sensing Reflectance at 412nm",
+        "sr^-1"
+    ],
+    "MICRO": [
+        "Multi-sensor Microphytoplankton Chlorophyll a concentration",
+        "milligram m^-3"
+    ],
+    "NANO": [
+        "Multi-sensor Nanophytoplankton Chlorophyll a concentration",
+        "milligram m^-3"
+    ],
+    "RRS400": [
+        "Remote Sensing Reflectance at rrs400",
+        "sr^-1"
+    ],
+    "RRS443": [
+        "Multi-sensor Remote Sensing Reflectance at 443nm",
+        "sr^-1"
+    ],
+    "PICO": [
+        "Multi-sensor Picophytoplankton Chlorophyll a concentration",
+        "milligram m^-3"
+    ],
+    "PROKAR": [
+        "Multi-sensor Prokaryote Chlorophyll a concentration",
+        "milligram m^-3"
+    ],
+    "WTM": [
+        "Water Type Mask for Chlorophyll a concentration",
+        "1"
+    ],
+    "RRS490": [
+        "Multi-sensor Remote Sensing Reflectance at 490nm",
+        "sr^-1"
+    ],
+    "RRS412_5": [
+        "Remote Sensing Reflectance at rrs412 5",
+        "sr^-1"
+    ],
+    "RRS442_5": [
+        "Remote Sensing Reflectance at rrs442 5",
+        "sr^-1"
+    ],
+    "RRS510": [
+        "Remote Sensing Reflectance at rrs510",
+        "sr^-1"
+    ],
+    "RRS555": [
+        "Multi-sensor Remote Sensing Reflectance at 555nm",
+        "sr^-1"
+    ],
+    "RRS560": [
+        "Remote Sensing Reflectance at rrs560",
+        "sr^-1"
+    ],
+    "RRS670": [
+        "Multi-sensor Remote Sensing Reflectance at 670nm",
+        "sr^-1"
+    ],
+    "RRS620": [
+        "Remote Sensing Reflectance at rrs620",
+        "sr^-1"
+    ],
+    "RRS665": [
+        "Remote Sensing Reflectance at rrs665",
+        "sr^-1"
+    ],
+    "RRS673_75": [
+        "Remote Sensing Reflectance at rrs673 75",
+        "sr^-1"
+    ],
+    "RRS681_25": [
+        "Remote Sensing Reflectance at rrs681 25",
+        "sr^-1"
+    ],
+    "RRS708_75": [
+        "Remote Sensing Reflectance at rrs708 75",
+        "sr^-1"
+    ],
+    "RRS778_75": [
+        "Remote Sensing Reflectance at rrs778 75",
+        "sr^-1"
+    ],
+    "RRS865": [
+        "Remote Sensing Reflectance at rrs865",
+        "sr^-1"
+    ],
+    "chl": [
+        "Concentration of Chlorophyll in sea water",
+        "mg m-3"
+    ],
+    "phyc": [
+        "Concentration of Phytoplankton Biomass in sea water",
+        "mmol m-3"
+    ],
+    "nh4": [
+        "Mole concentration of Ammonium in sea water",
+        "mmol m-3"
+    ],
+    "no3": [
+        "Mole concentration of Nitrate in sea water",
+        "mmol m-3"
+    ],
+    "dissic": [
+        "Mole concentration of dissolved inorganic carbon in sea water",
+        "mol m-3"
+    ],
+    "po4": [
+        "Mole concentration of Phosphate in sea water",
+        "mmol m-3"
+    ],
+    "fpco2": [
+        "Surface downward flux at air-sea interface of carbon dioxide expressed as kg of carbon per square meter per second",
+        "kg m-2 s-1"
+    ],
+    "ph": [
+        "PH",
+        "1"
+    ],
+    "talk": [
+        "Alkalinity",
+        "mol m-3"
+    ],
+    "VHM0": [
+        "Spectral significant wave height (Hm0)",
+        "m"
+    ],
+    "VHM0_SW1": [
+        "Spectral significant primary swell wave height",
+        "m"
+    ],
+    "VHM0_SW2": [
+        "Spectral significant secondary swell wave height",
+        "m"
+    ],
+    "VHM0_WW": [
+        "Spectral significant wind wave height",
+        "m"
+    ],
+    "VMDR": [
+        "Mean wave direction from (Mdir)",
+        "degree"
+    ],
+    "VMDR_SW1": [
+        "Mean primary swell wave direction from",
+        "degree"
+    ],
+    "VMDR_SW2": [
+        "Mean secondary swell wave direction from",
+        "degree"
+    ],
+    "VMDR_WW": [
+        "Mean wind wave direction from",
+        "degree"
+    ],
+    "VPED": [
+        "Wave principal direction at spectral peak",
+        "degree"
+    ],
+    "VSDX": [
+        "Stokes drift U",
+        "m/s"
+    ],
+    "VSDY": [
+        "Stokes drift V",
+        "m/s"
+    ],
+    "VTM01_SW1": [
+        "Spectral moments (0,1) primary swell wave period",
+        "u"
+    ],
+    "VTM01_SW2": [
+        "Spectral moments (0,1) secondary swell wave period",
+        "u"
+    ],
+    "VTM01_WW": [
+        "Spectral moments (0,1) wind wave period",
+        "u"
+    ],
+    "VTM02": [
+        "Spectral moments (0,2) wave period (Tm02)",
+        "u"
+    ],
+    "VTM10": [
+        "Spectral moments (-1,0) wave period (Tm-10)",
+        "u"
+    ],
+    "VTPK": [
+        "Wave period at spectral peak / peak period (Tp)",
+        "u"
+    ]
+}
