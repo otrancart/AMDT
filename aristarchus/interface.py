@@ -804,11 +804,11 @@ elif choose == "Spatial analysis":
         # Show and delete files
         with col2_upload :
             with st.expander('Current availables occurrences files:'):
-                try:
-                    filelist_occ = gf.show_available_files_simple(os.getcwd()+"/..","Occurrences")
-                    st.table(filelist_occ)
-                except:
-                    st.error("Folder not found: 'Occurrences'")
+                occpath = os.getcwd()+"/../Occurrences"
+                if not os.path.exists(occpath):
+                    os.mkdir(occpath) 
+                filelist_occ = gf.show_available_files_simple(os.getcwd()+"/..","Occurrences")
+                st.table(filelist_occ)
                 
                 _file = st.selectbox("Choose a file",filelist_occ)
                 suppr = st.button("Delete file")
