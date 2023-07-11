@@ -34,7 +34,10 @@ def show_available_files(BDIR:str,FOLDER:str):
 				f = os.path.join(d_path, filename)
 				# check filename it is a file
 				if os.path.isfile(f) and not (filename.endswith("aux.xml") or filename.endswith(".tfw")):
-					filelist.append(filename)
+					# remove extension
+					if filename.endswith(".tif"):
+						os.rename(f,f.replace(".tif",""))
+					filelist.append(filename.replace(".tif",""))
 			dirlist[dirname]=filelist
 	
 	return dirlist
@@ -67,7 +70,10 @@ def show_available_files_simple(BDIR:str,FOLDER:str):
 	for filename in os.listdir(dir):
 		f = os.path.join(dir, filename)
 		# check if filename is a file
-		if os.path.isfile(f) and not (filename.endswith("aux.xml") or filename.endswith(".tfw")):
-			filelist.append(filename)
+		if os.path.isfile(f) and not (filename.endswith("aux.xml")):
+			# remove extension
+			if filename.endswith(".tif"):
+				os.rename(f,f.replace(".tif",""))
+			filelist.append(filename.replace(".tif",""))
 	
 	return filelist

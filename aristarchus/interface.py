@@ -403,8 +403,8 @@ elif (choose == "Set options"):
     #############
     # QGIS PATH #
     #############
-    qgis_path = st.text_input('QGIS path',qpath)
-    proc_path = st.text_input('Processing plugin path',ppath)
+    qgis_path = st.text_input('QGIS path (last folder=:blue[qgis])',qpath)
+    proc_path = st.text_input('Processing plugin path (last folder=:blue[plugins])',ppath)
     info = st.empty()
 
     with st.expander("How to get QGIS paths"):
@@ -413,6 +413,12 @@ elif (choose == "Set options"):
 
     if (qgis_path and proc_path)!="":
         if (qgis_path!=qpath) or (proc_path!=ppath):
+            if qgis_path.endswith("/"):
+                qgis_path = qgis_path[:-1]
+                st.info("Removing last /")
+            if proc_path.endswith("/"):
+                proc_path = proc_path[:-1]
+                st.info("Removing last /")
             if (not os.path.exists(qgis_path)) or (not os.path.exists(proc_path)):
                 st.error("This path doesn't exist")
                 info.text("Actual qgis path: "+qpath+"\nActual processing plugin path: "+ppath)
@@ -739,8 +745,14 @@ elif choose == "Spatial analysis":
         # Create Layer
         with tab2_layer:
             if qgis_imported==False:
-                st.error("QGIS path not found, please set in Set options")
-                st.stop()
+                # Import qgis module
+                try:
+                    import script_qgis_software as soft
+                except:
+                    st.error("QGIS path not found, please set in Set options")
+                    st.stop()
+                else:
+                    qgis_imported = True
 
             try:
                 dirlist_nc = gf.show_available_files(bdir,"NetCDF_files")
