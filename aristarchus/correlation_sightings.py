@@ -59,7 +59,7 @@ def correlation(BDIR:str,CSVPATH:str,SERVICE:str,SAVE=True):
             pts = all_pts[(all_pts['Date'].str.contains(YEAR))].reset_index()
 
             # Sample the raster at every point location and store values in DataFrame
-            path_to_file = str(BDIR)+'/NetCDF_files/'+str(SERVICE)+"/"+product
+            path_to_file = os.path.join(str(BDIR),'NetCDF_files',str(SERVICE),product)
             ds = xr.open_dataset(path_to_file)
             df = ds.to_dataframe().reset_index()
 
@@ -134,12 +134,13 @@ def correlation(BDIR:str,CSVPATH:str,SERVICE:str,SAVE=True):
             pts[VAR] = data
             pts = pts.loc[:, ~pts.columns.str.contains('^Unnamed')].drop("index",axis=1)
 
+            ################ TO ADAPT ################
             # Save in file
             if SAVE == True:
-                path = str(BDIR)+"/Results/"+str(SERVICE)
+                path = os.path.join(str(BDIR),"Results",str(SERVICE))
                 if not os.path.exists(path):
                     os.mkdir(path)
-                output_file = path+"/"+product+"__"+(str(CSVPATH).split("/")[-1]).replace(".csv","")+"-CORR.csv"
+                output_file = os.path.join(path,product+"__"+(os.path.split(str(CSVPATH))[1]).replace(".csv","")+"-CORR.csv")
                 pts.to_csv(output_file, sep=',', encoding='utf-8')
             
             result.append(pts)
@@ -253,8 +254,7 @@ def merge_all_CORR(BDIR:str,CSVFILE:str):
         all_data_1var = pd.DataFrame()
         for file in filelist[service]:
             if file.endswith(end): # GET CORR ONLY
-                path_to_file = os.path.join(path_to_results,service)
-                path_to_file = os.path.join(path_to_file,file)
+                path_to_file = os.path.join(path_to_results,service,file)
                 df = pd.read_csv(path_to_file,index_col=0,sep=",") 
                 all_data_1var = pd.concat([all_data_1var,df])
 
@@ -292,7 +292,7 @@ def merge_all_CORR(BDIR:str,CSVFILE:str):
     all_data = all_data.sort_values(by=['Date'])
 
     # save in file
-    output_file = str(BDIR)+"/"+str(CSVFILE).split(".")[0]+"-ALLCORR.csv"
+    output_file = os.path.join(str(BDIR),str(CSVFILE).split(".")[0]+"-ALLCORR.csv")
     all_data.to_csv(output_file,sep=',')
 
     return all_data

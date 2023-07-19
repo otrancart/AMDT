@@ -67,9 +67,9 @@ def moving_window(BDIR:str,FILEPATH:str,WIN:int):
         return None
 
     ### EXTRACT FROM FILENAME
-    SERVICE = FILEPATH.split('/')[-2]
+    SERVICE = os.path.split(os.path.split(FILEPATH)[0])[1]
     YEAR = FILEPATH.split('__')[-1]
-    VAR_FULL = (FILEPATH.split('/')[-1]).split('__')[0]
+    VAR_FULL = (os.path.split(FILEPATH)[1]).split('__')[0]
     VAR = VAR_FULL.split("pfx")[-1]
     D = ""
     if "]" in VAR:
@@ -100,12 +100,13 @@ def moving_window(BDIR:str,FILEPATH:str,WIN:int):
     df = pd.DataFrame(all_data)
     
     # save in file
-    path = str(BDIR)+"/Results/"+SERVICE
+    path = os.path.join(str(BDIR),"Results",SERVICE)
     if not os.path.exists(path):
         os.mkdir(path)
-    output_file = path+"/"+VAR_FULL+"__"+str(YEAR)+"__"+str(WIN)+"-MW.txt"
+    output_file = os.path.join(path,VAR_FULL+"__"+str(YEAR)+"__"+str(WIN)+"-MW.txt")
     df.to_csv(output_file,sep=',')
 
+    ################ TO ADAPT ################
     # get var name and unit
     with open("./variables.json","r") as f:
         json_dict = json.load(f)
@@ -150,7 +151,7 @@ def read_MW(FILEPATH:str):
     """
     ### EXTRACT FROM FILENAME
     YEAR = str(FILEPATH).split('__')[1]
-    VAR_FULL = (str(FILEPATH).split('/')[-1]).split('__')[0]
+    VAR_FULL = (os.path.split(str(FILEPATH))[1]).split('__')[0]
     VAR = VAR_FULL.split("pfx")[-1]
     D = ""
     if "]" in VAR:
@@ -160,6 +161,7 @@ def read_MW(FILEPATH:str):
 
     df = pd.read_csv(str(FILEPATH),index_col=0,sep=",") 
 
+    ################ TO ADAPT ################
     # get var name and unit
     with open("./variables.json","r") as f:
         json_dict = json.load(f)
@@ -231,8 +233,7 @@ def read_all_MW(BDIR:str,SERVICE:str,VAR:str):
     # TURN INTO DATAFRAME
     all_data = pd.DataFrame()
     for file in all_files:
-        path_to_file = os.path.join(path_to_results,str(SERVICE))
-        path_to_file = os.path.join(path_to_file,file)
+        path_to_file = os.path.join(path_to_results,str(SERVICE),file)
 
         df = pd.read_csv(path_to_file,index_col=0,sep=",") 
         all_data = pd.concat([all_data,df])
@@ -265,7 +266,7 @@ def read_all_MW(BDIR:str,SERVICE:str,VAR:str):
         idx+=1
     df_trend = pd.DataFrame(trend)
 
-
+    ################ TO ADAPT ################
     # get var name and unit
     with open("./variables.json","r") as f:
         json_dict = json.load(f)
@@ -326,6 +327,7 @@ def read_all_MW_CORR(DATA:pd.DataFrame,VAR:str,DATEMIN):
     
 
     WIN = str(VAR).split("-")[-1]
+    ################ TO ADAPT ################
     # get var name and unit
     with open("./variables.json","r") as f:
         json_dict = json.load(f)
@@ -392,7 +394,7 @@ def get_corr(BDIR:str,SERVICE:str,VAR:str):
 
     all_data = pd.DataFrame()
     for file in all_files:
-        path_to_file = path_to_results+"/"+str(SERVICE)+"/"+file
+        path_to_file = os.path.join(path_to_results,str(SERVICE),file)
 
         df = pd.read_csv(path_to_file,index_col=0,sep=",") 
         all_data = pd.concat([all_data,df])
@@ -493,16 +495,14 @@ def compare_MW(BDIR:str,SERVICE1:str,VAR1:str,SERVICE2:str,VAR2:str):
     all_data = pd.DataFrame()
     path_to_results = os.path.join(str(BDIR),'Results')
     for file in all_files1:
-        path_to_file = os.path.join(path_to_results,str(SERVICE1))
-        path_to_file = os.path.join(path_to_file,file)
+        path_to_file = os.path.join(path_to_results,str(SERVICE1),file)
 
         df = pd.read_csv(path_to_file,index_col=0,sep=",") 
         df = df.rename(columns={"avg":str(SERVICE1)+"_"+str(VAR1)+"_avg","std":str(SERVICE1)+"_"+str(VAR1)+"_std"})
         all_data = pd.concat([all_data,df])
 
     for file in all_files2:
-        path_to_file = os.path.join(path_to_results,str(SERVICE2))
-        path_to_file = os.path.join(path_to_file,file)
+        path_to_file = os.path.join(path_to_results,str(SERVICE2),file)
 
         df = pd.read_csv(path_to_file,index_col=0,sep=",") 
         df = df.rename(columns={"avg":str(SERVICE2)+"_"+str(VAR2)+"_avg","std":str(SERVICE2)+"_"+str(VAR2)+"_std"})
@@ -519,6 +519,7 @@ def compare_MW(BDIR:str,SERVICE1:str,VAR1:str,SERVICE2:str,VAR2:str):
     all_data['time'] = all_data['time'].apply(to_datetime_fmt)
     all_data = dates.merge(all_data, how='left', on='time') # dates added to all_data with NaN
 
+    ################ TO ADAPT ################
     # get var name and unit
     with open("./variables.json","r") as f:
         json_dict = json.load(f)

@@ -8,8 +8,10 @@ Github page: https://github.com/otrancart/AMDT
    :caption: Contents:
 
    Home <self>
+   about
    filenames
    modules
+   features
 
 
 
@@ -18,4 +20,3 @@ Indices and tables
 
 * :ref:`genindex`
 * :ref:`modindex`
-* :ref:`search`

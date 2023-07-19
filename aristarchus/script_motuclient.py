@@ -162,6 +162,7 @@ def get_infos(JSON_SCRIPT,PRODUCT:str):
                     D = []
 
             # GET VARS
+            ################ TO ADAPT ################
             with open("./variables.json","r") as f:
                 vars_dict = json.load(f)
 
@@ -180,6 +181,7 @@ def get_infos(JSON_SCRIPT,PRODUCT:str):
                     # Save variable name and unit in json file
                     vars_dict[k]=[varname,varunit]
                     vars_dict = json.dumps(vars_dict, indent = 4)
+                    ################ TO ADAPT ################
                     with open("./variables.json","w") as f:
                         f.write(vars_dict)
 
@@ -236,6 +238,7 @@ def get_prefix(PRODUCT:str):
         str
             "no" if not found
     """
+    ################ TO ADAPT ################
     with open("./prefix.json","r") as f:
         all_prefix = json.load(f)
     if PRODUCT in all_prefix.keys():
@@ -255,6 +258,7 @@ def define_prefix(PRODUCT:str,PREFIX:str):
         PREFIX : str
             prefix of this dataset
     """
+    ################ TO ADAPT ################
     # Save in json file
     with open("./prefix.json","r") as f:
         all_prefix = json.load(f)
@@ -295,7 +299,7 @@ def final_req(BDIR:str,JSON_SCRIPT,PRODUCT:str,PREFIX:str,VARIABLE:list,D:str,YE
         str
             name of output file already created, "" otherwise
     """
-    path_coord = BDIR+"/coordinates.json"
+    path_coord = os.path.join(BDIR,"coordinates.json")
     with open(path_coord,"r") as f:
         json_dict = json.load(f)
     LONG = json_dict["LONG"]
@@ -310,12 +314,11 @@ def final_req(BDIR:str,JSON_SCRIPT,PRODUCT:str,PREFIX:str,VARIABLE:list,D:str,YE
     MOTU = re.search(r'"motu":"[\w\:\/\.\-]+\?',str(JSON_SCRIPT))[0]
     MOTU = MOTU.replace('"motu":"',"")
     MOTU = MOTU.replace("?","")
-    
 
-    path = BDIR+"/NetCDF_files/"+SERVICE
+    path = os.path.join(BDIR,"NetCDF_files",SERVICE)
     if not os.path.exists(path):
         os.mkdir(path)
-    folder = gf.show_available_files_simple(BDIR+"/NetCDF_files",SERVICE)
+    folder = gf.show_available_files_simple(os.path.split(path)[0],SERVICE)
 
     data_request_dict = []
     for i in range(len(VARIABLE)):
@@ -384,7 +387,7 @@ def create_map_1d(FILEPATH:str,MONTH:str,DAY:str,DEPTH:float):
 
     ### EXTRACT FROM FILENAME
     YEAR = FILEPATH.split('__')[-1]
-    VAR_FULL = (FILEPATH.split('/')[-1]).split('__')[0]
+    VAR_FULL = (os.path.split(FILEPATH)[1]).split('__')[0]
     VAR = VAR_FULL.split("pfx")[-1]
     if "]" in VAR:
         VAR = VAR.split("]")[-1]
@@ -396,6 +399,7 @@ def create_map_1d(FILEPATH:str,MONTH:str,DAY:str,DEPTH:float):
     t = YEAR+'-'+str(MONTH)+'-'+str(DAY)
 
     # get var name and unit
+    ################ TO ADAPT ################
     with open("./variables.json","r") as f:
         json_dict = json.load(f)
     VARID = VAR.split("pfx")[-1]
@@ -456,7 +460,7 @@ def create_map(FILEPATH:str,DEPTH:float,W:int,H:int,Z:int):
     """
     ### EXTRACT FROM FILENAME
     YEAR = FILEPATH.split('__')[-1]
-    VAR_FULL = (FILEPATH.split('/')[-1]).split('__')[0]
+    VAR_FULL = (os.path.split(FILEPATH)[1]).split('__')[0]
     VAR = VAR_FULL.split("pfx")[-1]
     if "]" in VAR:
         VAR = VAR.split("]")[-1]

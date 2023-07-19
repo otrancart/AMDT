@@ -20,6 +20,7 @@ import re
 from datetime import date
 import pymannkendall as mk
 
+################ TO ADAPT ################
 # Set working directory
 if "aristarchus" not in os.getcwd():
     os.chdir("./aristarchus")
@@ -128,7 +129,7 @@ def filter_layers(all_prod:list,suffix:list):
     all_years = {}
     for p in all_prod:
         # Get suffix
-        prod = p.split('/')[-1]
+        prod = os.path.split(p)[1]
         suf = (((prod.split("avg")[-1]).split("std")[-1]).split("min")[-1]).split("max")[-1]
         if suf in suffix:
             prodlist.append(p)
@@ -152,6 +153,13 @@ def filter_layers(all_prod:list,suffix:list):
     return prodlist,all_years,variables
 
 
+def is_column_float(column):
+    for item in column:
+        if not isinstance(item, float):
+            return False
+    return True
+
+
 
 ########
 # MAIN #
@@ -164,8 +172,7 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="expanded",
     menu_items={
-        'Get Help': "mailto:otrancart@outlook.com",
-        'Report a bug': "https://github.com/otrancart/Archipelagos_internship/issues",
+        'Report a bug': "https://github.com/otrancart/AMDT/issues",
         'About': None
     }
 )
@@ -210,8 +217,14 @@ if choose == "About":
     st.write("""The purpose of Aristarchus the MarineDataTrawler is to make spatial analysis easier, using marine environmental variables 
     from [Copernicus](https://data.marine.copernicus.eu/products) database, such as 🌡️ sea surface temperature,
     🧂 salinity, 💚 plankton...""")
-    st.write("You will need to create a [copernicus account](https://data.marine.copernicus.eu/register) in order to download data in NetCDF files.")
+    st.write("You will need to create a [copernicus account](https://data.marine.copernicus.eu/register) in order to download satellite data in NetCDF files.")
 
+    st.header("What is a NetCDF file?")
+    st.write("""NetCDF (Network Common Data Form) is a file format for storing multidimensional scientific data.
+    For each longitude, latitude and date, you will have a corresponding data. In **:blue[Spatial analysis]** 
+    you can first create a NetCDF file for 1 year at a specific area.""")
+    st.write("To change the desired coordinates, update it in **:blue[Set options]**")
+    
     st.header("What will be created in the backup folder?")
     st.write("You can set the backup folder in **:blue[Set options]**")
 
@@ -238,12 +251,6 @@ if choose == "About":
         st.text("example of name__species-CORR.csv data")
 
 
-    st.header("What is a NetCDF file?")
-    st.write("""NetCDF (Network Common Data Form) is a file format for storing multidimensional scientific data.
-    For each longitude, latitude and date, you will have a corresponding data. In **:blue[Spatial analysis]** 
-    you can first create a NetCDF file for 1 year at a specific area.""")
-    st.write("To change the desired coordinates, update it in **:blue[Set options]**")
-    
     st.header("Spatial analysis")
     st.write("In order to analyse an environmental variable you must first create a NetCDF file for this variable")
     st.write(""" You can either:
@@ -270,6 +277,7 @@ if choose == "About":
 ##########################################################################################################
 ##########################################################################################################
 elif (choose == "Set options"):
+    ################ TO ADAPT ################
     # Get current options
     with open("./options.json","r") as f:
         json_dict = json.load(f)
@@ -288,27 +296,30 @@ elif (choose == "Set options"):
     info3 = st.empty()
 
     if bf!=bdir:
+        ################ TO ADAPT ################
         if bf.endswith("/"):
             bf = bf[:-1]
             st.info("Removing last /")
         try:           
             # Create folders
-            path = bf+"/Layers"
+            path = os.path.join(bf,"Layers")
             if not os.path.exists(path):
                 os.mkdir(path) 
                 info1.text("Creating folder: Layers")
 
-            path = bf+"/NetCDF_files"
+            path = os.path.join(bf,"NetCDF_files")
             if not os.path.exists(path):
                 os.mkdir(path)
                 info2.text("Creating folder: NetCDF_files")
             
-            path = bf+"/Results"
+            path = os.path.join(bf,"Results")
             if not os.path.exists(path):
                 os.mkdir(path)
                 info3.text("Creating folder: Results")
-                
-
+        except :
+            st.error("This folder doesn't exist")
+        else:
+            ################ TO ADAPT ################
             # Save in options.json
             with open("./options.json","r") as f:
                 json_dict = json.load(f)
@@ -318,14 +329,11 @@ elif (choose == "Set options"):
                 f.write(json_dict)
             st.success('New path saved!', icon="✅")
 
-        except :
-            st.error("This folder doesn't exist")
-
 
     ###############
     # COORDINATES #
     ###############
-    path_coord = bf+"/coordinates.json"
+    path_coord = os.path.join(bf,"coordinates.json")
     if os.path.exists(path_coord): 
         # Get coordinates of the folder
         with open(path_coord,"r") as f:
@@ -413,6 +421,7 @@ elif (choose == "Set options"):
 
     if (qgis_path and proc_path)!="":
         if (qgis_path!=qpath) or (proc_path!=ppath):
+            ################ TO ADAPT ################
             if qgis_path.endswith("/"):
                 qgis_path = qgis_path[:-1]
                 st.info("Removing last /")
@@ -423,6 +432,7 @@ elif (choose == "Set options"):
                 st.error("This path doesn't exist")
                 info.text("Actual qgis path: "+qpath+"\nActual processing plugin path: "+ppath)
             else :
+                ################ TO ADAPT ################
                 # Save in options.json
                 with open("./options.json","r") as f:
                     json_dict = json.load(f)
@@ -452,21 +462,21 @@ elif choose == "Spatial analysis":
     # Remove extra space
     st.write('<style>div.block-container{padding-top:2rem;padding-bottom:2rem;}</style>', unsafe_allow_html=True)
     
+    ################ TO ADAPT ################
     # Get path to backup folder
     with open("./options.json","r") as f:
         json_dict = json.load(f)
     bdir = json_dict["backup_path"]
-    bdir_name = bdir.split('/')[-1]
 
     # Get coordinates
-    path_coord = bdir+"/coordinates.json"
+    path_coord = os.path.join(bdir,"coordinates.json")
     try:
         with open(path_coord,"r") as f:
             json_dict = json.load(f)
         lon = json_dict["LONG"]
         lat = json_dict["LAT"]
     except:
-        st.error("File not found: "+bdir+'/coordinates.json')
+        st.error("File not found: "+path_coord)
         st.stop()
     
     choose_option = option_menu(None, ["Download a 1 year NetCDF file", "Daily average data", "Statistics on each pixel", "Upload an occurrences file", "Correlation with occurrences"],
@@ -491,14 +501,14 @@ elif choose == "Spatial analysis":
         try:
             dirlist_nc = gf.show_available_files(bdir,"NetCDF_files")
         except:
-            st.error("Folder not found: "+bdir+'/NetCDF_files')
+            st.error("Folder not found: "+os.path.join(bdir,'NetCDF_files'))
             st.stop()
 
 
         # Availables NetCDF files and infos
         col1_netcdf, col2_netcdf = st.columns([2,1])
         with col2_netcdf: 
-            st.write("__Current backup folder:__ "+bdir_name)
+            st.write("__Current backup folder:__ "+os.path.split(bdir)[1])
 
             st.info("""The more the area is big and the dataset resolution is high, 
             the more time it will take to download the NetCDF file (few minutes, 
@@ -545,16 +555,20 @@ elif choose == "Spatial analysis":
                     pfx_check = motu.search_duplicate(json_script,product,all_vars)
                     if pfx_check == True: # duplicates found
                         _pfx = st.text_input('Define a prefix for this dataset:')
-                        if not re.match(r"^[a-zA-Z0-9\-]+$", _pfx):
-                            st.warning('Prefix contains forbidden characters, please use letters, digits or - only', icon="⚠️")
+                        if _pfx == "":
                             st.stop()
-                        elif (_pfx!="no") and (_pfx!="pfx") and (_pfx!=""):
-                            motu.define_prefix(product,_pfx)
-                            pfx = _pfx
-                            st.success('Prefix saved', icon="✅")
-                        else :
-                            st.warning('Please choose another prefix', icon="⚠️")
-                            st.stop()
+                        else:
+                            if not re.match(r"^[a-zA-Z0-9\-]+$", _pfx):
+                                st.warning('Prefix contains forbidden characters, please use letters, digits or - only', icon="⚠️")
+                                st.stop()
+                            elif (_pfx!="no") and (_pfx!="pfx") and (_pfx!=""):
+                                motu.define_prefix(product,_pfx)
+                                pfx = _pfx
+                                st.success('Prefix saved', icon="✅")
+                                st.experimental_rerun()
+                            else :
+                                st.warning('Please choose another prefix', icon="⚠️")
+                                st.stop()
                     else : # duplicates not found
                         pfx = ""
                         motu.define_prefix(product,pfx)
@@ -610,7 +624,7 @@ elif choose == "Spatial analysis":
                                 if filec!="":
                                     alc.append(filec)
                         if alc!=[]:
-                            st.warning('File(s) already created: '+alc, icon="⚠️")
+                            st.warning('File(s) already created: '+str(alc), icon="⚠️")
                             st.success('Other file(s) .nc saved in: '+bdir+'/NetCDF_files', icon="✅")
                         else :                
                             st.success('File(s) .nc saved in: '+bdir+'/NetCDF_files', icon="✅")
@@ -627,7 +641,7 @@ elif choose == "Spatial analysis":
             try:
                 dirlist_res = gf.show_available_files(bdir,"Results")
             except:
-                st.error("Folder not found: "+bdir+'/Results')
+                st.error("Folder not found: "+os.path.join(bdir,'Results'))
                 st.stop()
             
             if dirlist_res=={}:
@@ -645,7 +659,7 @@ elif choose == "Spatial analysis":
                     product_avMW = st.selectbox('Choose the dataset', product_all_avMW)
                     
                     # Path to MW
-                    path_file_avMW = bdir+"/Results/"+service_res_avMW+"/"+product_avMW
+                    path_file_avMW = os.path.join(bdir,"Results",service_res_avMW,product_avMW)
                     # Plot MW
                     mw_graph = sa.read_MW(path_file_avMW)
                     st.pyplot(mw_graph)
@@ -656,7 +670,7 @@ elif choose == "Spatial analysis":
             try:
                 dirlist_nc = gf.show_available_files(bdir,"NetCDF_files")
             except:
-                st.error("Folder not found: "+bdir+'/NetCDF_files')
+                st.error("Folder not found: "+os.path.join(bdir,'NetCDF_files'))
                 st.stop()
 
             if dirlist_nc=={}:
@@ -674,10 +688,10 @@ elif choose == "Spatial analysis":
                     st.warning('No NetCDF file found', icon="⚠️")
                     st.stop()
 
-                path_res = bdir+"/Results/"+service_nc_MW
+                path_res = os.path.join(bdir,"Results",service_nc_MW)
                 if os.path.exists(path_res):
                     # check if MW already created
-                    filelist_res = gf.show_available_files_simple(bdir,"Results/"+service_nc_MW)
+                    filelist_res = gf.show_available_files_simple(os.path.split(path_res)[0],service_nc_MW)
                     for p in filelist_res:
                         prod = p.replace("-MW.txt","")
                         prod = prod.replace("__"+str(window),"")
@@ -703,18 +717,18 @@ elif choose == "Spatial analysis":
                     with st.spinner("Please wait..."):
                         if type(product_nc_MW)!=list:
                             # Path to NetCDF
-                            path_file_MW = bdir+"/NetCDF_files/"+service_nc_MW+"/"+product_nc_MW
+                            path_file_MW = os.path.join(bdir,"NetCDF_files",service_nc_MW,product_nc_MW)
                             mw = sa.moving_window(bdir,path_file_MW,int(window))
                         else:
                             for p in product_nc_MW:
                                 # Path to NetCDF
-                                path_file_MW = bdir+"/NetCDF_files/"+service_nc_MW+"/"+p
+                                path_file_MW = os.path.join(bdir,"NetCDF_files",service_nc_MW,p)
                                 mw = sa.moving_window(bdir,path_file_MW,int(window))
 
                         if mw==None:
                             st.warning('Please choose a daily or monthly dataset', icon="⚠️")
                         else:
-                            st.success('File(s) .txt saved in '+bdir+'/Results/'+service_nc_MW, icon="✅")
+                            st.success('File(s) .txt saved in '+os.path.split(path_file_MW)[0], icon="✅")
                             st.pyplot(mw)
 
 
@@ -729,7 +743,7 @@ elif choose == "Spatial analysis":
             try:
                 dirlist_lay = gf.show_available_files(bdir,"Layers")
             except:
-                st.error("Folder not found: "+bdir+'/Layers')
+                st.error("Folder not found: "+os.path.join(bdir,'Layers'))
                 st.stop()
             
             if dirlist_lay=={}:
@@ -757,12 +771,12 @@ elif choose == "Spatial analysis":
             try:
                 dirlist_nc = gf.show_available_files(bdir,"NetCDF_files")
             except:
-                st.error("Folder not found: "+bdir+'/NetCDF_files')
+                st.error("Folder not found: "+os.path.join(bdir,"NetCDF_files"))
                 st.stop()
             try:
                 filelist = gf.show_available_files_simple(bdir,"Layers")
             except:
-                st.error("Folder not found: "+bdir+'/Layers')
+                st.error("Folder not found: "+os.path.join(bdir,"Layers"))
                 st.stop()
             
             if dirlist_nc=={}:
@@ -786,13 +800,13 @@ elif choose == "Spatial analysis":
                         with st.spinner("Please wait..."):
                             if type(product_nc_lay)!=list:
                                 # Path to NetCDF
-                                path_file_lay = bdir+"/NetCDF_files/"+service_nc_lay+"/"+product_nc_lay
+                                path_file_lay = os.path.join(bdir,"NetCDF_files",service_nc_lay,product_nc_lay)
                                 soft.run_qgis_analysis(bdir,path_file_lay,stats,timer)
                             else:
                                 for p in product_nc_lay:
-                                    path_file_lay = bdir+"/NetCDF_files/"+service_nc_lay+"/"+p
+                                    path_file_lay = os.path.join(bdir,"NetCDF_files",service_nc_lay,p)
                                     soft.run_qgis_analysis(bdir,path_file_lay,stats,timer)
-                        st.success('File(s) .tif saved in '+bdir+'/Layers/'+service_nc_lay, icon="✅")
+                        st.success('File(s) .tif saved in '+os.path.split(path_file_lay)[0], icon="✅")
 
 
     ##############################
@@ -804,6 +818,7 @@ elif choose == "Spatial analysis":
         # Show and delete files
         with col2_upload :
             with st.expander('Current availables occurrences files:'):
+                ################ TO ADAPT ################
                 occpath = os.getcwd()+"/../Occurrences"
                 if not os.path.exists(occpath):
                     os.mkdir(occpath) 
@@ -813,6 +828,7 @@ elif choose == "Spatial analysis":
                 _file = st.selectbox("Choose a file",filelist_occ)
                 suppr = st.button("Delete file")
                 if suppr :
+                    ################ TO ADAPT ################
                     os.remove(os.getcwd()+"/../Occurrences/"+_file)
                     st.success('File deleted: '+_file, icon="✅")
                     st.experimental_rerun()
@@ -836,14 +852,21 @@ elif choose == "Spatial analysis":
                 data = {}
                 other = []
                 for col in list(dataframe.columns):
-                    if col in ['Latitude','Longitude','Date']:
-                        data[col]=dataframe[col]
-                        pass
-                    elif col in ['latitude','lat','LAT','LATITUDE']:
-                        data['Latitude']=dataframe[col]
-                    elif col in ['longitude','lon','long','LON','LONG','LONGITUDE']:
-                        data['Longitude']=dataframe[col]
-                    elif col in ['date','day','Day','Timestamp','DATE','DAY','TIMESTAMP']:
+                    if col in ['Latitude','latitude','lat','LAT','LATITUDE']:
+                        # verify if all floats
+                        if is_column_float(dataframe[col])==True:
+                            data['Latitude']=dataframe[col]
+                        else:
+                            st.warning('Column '+col+' contains non-floats values', icon="⚠️")
+                            st.stop()
+                    elif col in ['Longitude','longitude','lon','long','LON','LONG','LONGITUDE']:
+                        # verify if all floats
+                        if is_column_float(dataframe[col])==True:
+                            data['Longitude']=dataframe[col]
+                        else:
+                            st.warning('Column '+col+' contains non-floats values', icon="⚠️")
+                            st.stop()
+                    elif col in ['Date','date','day','Day','Timestamp','DATE','DAY','TIMESTAMP']:
                         data['Date']=dataframe[col]
                     else : 
                         other.append(col)
@@ -871,6 +894,7 @@ elif choose == "Spatial analysis":
                     data['Occurrences']=dataframe[col_occ]
                     data['Date']=pd.to_datetime(data['Date'], dayfirst=_dayfirst,format='mixed')
                     # data['Year'] = data['Year'].astype(int).astype(str)
+                    ################ TO ADAPT ################
                     OUTPUT_FILE = os.getcwd()+'/../Occurrences/'+name_occ+'.csv'
                     pd.DataFrame(data).to_csv(OUTPUT_FILE, sep=',', encoding='utf-8')
                     st.success('File saved in: '+OUTPUT_FILE, icon="✅")
@@ -884,14 +908,15 @@ elif choose == "Spatial analysis":
         try:
             dirlist_nc = gf.show_available_files(bdir,"NetCDF_files")
         except:
-            st.error("Folder not found: "+bdir+'/NetCDF_files')
+            st.error("Folder not found: "+os.path.join(bdir,'NetCDF_files'))
             st.stop()
         try:
             dirlist_res = gf.show_available_files(bdir,"Results")
         except:
-            st.error("Folder not found: "+bdir+'/Results')
+            st.error("Folder not found: "+os.path.join(bdir,"Results"))
             st.stop()
         try:
+            ################ TO ADAPT ################
             filelist_occ = gf.show_available_files_simple(os.getcwd()+"/..","Occurrences")
         except:
             st.error("Folder not found: 'Occurrences'")
@@ -906,7 +931,7 @@ elif choose == "Spatial analysis":
             with col1_corr:
                 csvfile = st.selectbox('Choose occurrences file', filelist_occ)
             with col2_corr:
-                st.write("__Current backup folder:__ "+bdir_name)
+                st.write("__Current backup folder:__ "+os.path.split(bdir)[1])
 
                 # Merge all csv
                 st.write("_Several files already created:_")
@@ -914,7 +939,7 @@ elif choose == "Spatial analysis":
 
                 if merge:
                     d=corr.merge_all_CORR(bdir,csvfile)
-                    st.success('File saved in: '+bdir+'/'+csvfile.split(".")[0]+'-ALLCORR.csv', icon="✅")
+                    st.success('File saved in: '+os.path.join(bdir,csvfile.split(".")[0]+'-ALLCORR.csv'), icon="✅")
 
         # CORR already created
         with col2_corr:
@@ -943,8 +968,8 @@ elif choose == "Spatial analysis":
                 st.info("Rerun correlation replace created files")
 
                 if create:
-                    csvpath = os.path.join(os.getcwd()+"/..",'Occurrences')
-                    csvpath = os.path.join(csvpath,csvfile)
+                    ################ TO ADAPT ################
+                    csvpath = os.path.join(os.getcwd()+"/..",'Occurrences',csvfile)
                 
                     with st.spinner("Please wait..."):
                         df=corr.correlation(bdir,csvpath,service_nc_CORR)
@@ -960,11 +985,11 @@ elif choose == "Meta-analysis":
     # Remove extra space
     st.write('<style>div.block-container{padding-top:2rem;padding-bottom:2rem;}</style>', unsafe_allow_html=True)
     
+    ################ TO ADAPT ################
     # Get path to backup folder
     with open("./options.json","r") as f:
         json_dict = json.load(f)
     bdir = json_dict["backup_path"]
-    bdir_name = bdir.split("/")[-1]
 
     # Get files in Results
     try:
@@ -973,7 +998,7 @@ elif choose == "Meta-analysis":
         st.error("Folder not found: "+bdir+'/Results')
         st.stop()
 
-    st.write("__Current backup folder:__ "+bdir_name)
+    st.write("__Current backup folder:__ "+os.path.split(bdir)[1])
 
     tab1_metaanalysis, tab2_metaanalysis = st.tabs(["Show 1 dataset data", "Compare 2 datasets"])
 
@@ -1015,7 +1040,7 @@ elif choose == "Meta-analysis":
             # Save figure
             savefig = st.button("Save figure",use_container_width=True)
             if savefig:
-                output_fig = bdir+"/"+variable_MW+".png"
+                output_fig = os.path.join(bdir,variable_MW+".png")
                 fig.savefig(output_fig)
                 st.success('Fig saved in '+output_fig, icon="✅")
 
@@ -1043,7 +1068,7 @@ elif choose == "Meta-analysis":
                 # Save figure
                 savefig2 = st.button("Save figure",key="s2",use_container_width=True)
                 if savefig2:
-                    output_fig2 = bdir+"/LR-"+variable_MW+".png"
+                    output_fig2 = os.path.join(bdir,"LR-"+variable_MW+".png")
                     fig2.savefig(output_fig2)
                     st.success('Fig saved in '+output_fig2, icon="✅")
 
@@ -1062,7 +1087,7 @@ elif choose == "Meta-analysis":
             # Save figure
             savefig3 = st.button("Save figure",key="s3",use_container_width=True)
             if savefig3:
-                output_fig3 = bdir+"/STL-"+variable_MW+".png"
+                output_fig3 = os.path.join(bdir,"STL-"+variable_MW+".png")
                 fig3.savefig(output_fig3)
                 st.success('Fig saved in '+output_fig3, icon="✅")
 
@@ -1100,7 +1125,7 @@ elif choose == "Meta-analysis":
                     # Save figure
                     savefigcorr = st.button("Save figure",key="scorr")
                     if savefigcorr:
-                        output_figcorr = bdir+"/CORR-"+variable_MW+".png"
+                        output_figcorr = os.path.join(bdir,"CORR-"+variable_MW+".png")
                         f.savefig(output_figcorr)
                         st.success('Fig saved in '+output_figcorr, icon="✅")
     
@@ -1156,15 +1181,15 @@ elif choose == "Show map":
     # Remove extra space
     st.write('<style>div.block-container{padding-top:2rem;padding-bottom:2rem;}</style>', unsafe_allow_html=True)
     
+    ################ TO ADAPT ################
     # Get path to backup folder
     with open("./options.json","r") as f:
         json_dict = json.load(f)
     bdir = json_dict["backup_path"]
-    bdir_name = bdir.split("/")[-1]
 
 
     # Get coordinates
-    path_coord = bdir+"/coordinates.json"
+    path_coord = os.path.join(bdir,"coordinates.json")
     try:
         with open(path_coord,"r") as f:
             json_dict = json.load(f)
@@ -1186,13 +1211,14 @@ elif choose == "Show map":
         st.error("Folder not found: "+bdir+'/Layers')
         st.stop()
     try:
+        ################ TO ADAPT ################
         dirlist_occ = gf.show_available_files_simple(os.getcwd()+"/..","Occurrences")
     except:
         st.error("Folder not found: "+os.getcwd()+"/../Occurrences")
         st.stop()
 
 
-    st.write("__Current backup folder:__ "+bdir_name)
+    st.write("__Current backup folder:__ "+os.path.split(bdir)[1])
 
     tab1_map,tab2_map,tab3_map,tab4_map,tab5_map = st.tabs(["occurrences only","variable per day", "variable per month", "variable per season", "variable per year"])
     st.set_option('deprecation.showPyplotGlobalUse', False)
@@ -1205,6 +1231,7 @@ elif choose == "Show map":
         if dirlist_occ == []:
             st.warning('Please upload an occurrences file first', icon="⚠️")
         else:
+            ################ TO ADAPT ################
             occ = st.selectbox("Choose occurrence file",dirlist_occ)
             occ_path = os.getcwd()+"/../Occurrences/"+str(occ)
             
@@ -1232,7 +1259,7 @@ elif choose == "Show map":
                 product_daymap = st.selectbox('Choose the dataset', dirlist_nc[service_daymap],key="p1")
 
                 # Path to NetCDF
-                path_file_day = bdir+"/NetCDF_files/"+service_daymap+"/"+product_daymap
+                path_file_day = os.path.join(bdir,"NetCDF_files",service_daymap,product_daymap)
 
                 ### EXTRACT FROM FILENAME
                 year_day = path_file_day.split('__')[-1]
@@ -1293,7 +1320,7 @@ elif choose == "Show map":
                         i = 1
                         pathfiles = {}
                         for p in prodlist_monthmap:
-                            pathfiles[i] = bdir+"/Layers/"+service_monthmap+"/"+p
+                            pathfiles[i] = os.path.join(bdir,"Layers",service_monthmap,p)
                             i+=1
 
                         depth_month = motu.get_depths(pathfiles[1],geotiff=True)
@@ -1313,11 +1340,12 @@ elif choose == "Show map":
                 i+=1
 
             ### EXTRACT FROM FILENAME
-            VAR_FULL = (pathfiles[1].split('/')[-1]).split('__')[0]
+            VAR_FULL = (os.path.split(pathfiles[1])[1]).split('__')[0]
             VAR = VAR_FULL.split("pfx")[-1]
             if "]" in VAR:
                 VAR = VAR.split("]")[-1]
 
+            ################ TO ADAPT ################
             # Get var name and unit
             with open("./variables.json","r") as f:
                 json_dict = json.load(f)
@@ -1363,10 +1391,10 @@ elif choose == "Show map":
                         st.warning('No file available, choose another statistic', icon="⚠️")
                     else:
                         # Path to Layer
-                        path_file1= bdir+"/Layers/"+service_seasonmap+"/"+prodlist_seasonmap[0]
-                        path_file2= bdir+"/Layers/"+service_seasonmap+"/"+prodlist_seasonmap[1]
-                        path_file3= bdir+"/Layers/"+service_seasonmap+"/"+prodlist_seasonmap[2]
-                        path_file4= bdir+"/Layers/"+service_seasonmap+"/"+prodlist_seasonmap[3]
+                        path_file1= os.path.join(bdir,"Layers",service_seasonmap,prodlist_seasonmap[0])
+                        path_file2= os.path.join(bdir,"Layers",service_seasonmap,prodlist_seasonmap[1])
+                        path_file3= os.path.join(bdir,"Layers",service_seasonmap,prodlist_seasonmap[2])
+                        path_file4= os.path.join(bdir,"Layers",service_seasonmap,prodlist_seasonmap[3])
 
                         depth_season = motu.get_depths(path_file1,geotiff=True)
                         if depth_season !=[]:
@@ -1383,11 +1411,12 @@ elif choose == "Show map":
             ds4 = motu.create_map(path_file4,float(choice_depth_season),450,500,z)
 
             ### EXTRACT FROM FILENAME
-            VAR_FULL = (path_file1.split('/')[-1]).split('__')[0]
+            VAR_FULL = (os.path.split(path_file1)[1]).split('__')[0]
             VAR = VAR_FULL.split("pfx")[-1]
             if "]" in VAR:
                 VAR = VAR.split("]")[-1]
 
+            ################ TO ADAPT ################
             # Get var name and unit
             with open("./variables.json","r") as f:
                 json_dict = json.load(f)
@@ -1416,7 +1445,7 @@ elif choose == "Show map":
             # filter layers
             prodlist_yearmap = []
             for p in dirlist_lay[service_yearmap]:
-                prod = p.split('/')[-1]
+                prod = os.path.split(p)[1]
                 suf = (((prod.split("avg")[-1]).split("std")[-1]).split("min")[-1]).split("max")[-1]
                 if suf not in ["spring","summer","autumn","winter","1","2","3","4","5","6","7","8","9","10","11","12"]:
                     prodlist_yearmap.append(p)
@@ -1425,9 +1454,9 @@ elif choose == "Show map":
                 st.stop()
                     
             product_yearmap = st.selectbox('Choose the file', prodlist_yearmap,key="p4")
-
+            
             # Path to Layer
-            path_file_year = bdir+"/Layers/"+service_yearmap+"/"+product_yearmap
+            path_file_year = os.path.join(bdir,"Layers",service_yearmap,product_yearmap)
             
             depth_year = motu.get_depths(path_file_year,geotiff=True)
             if depth_year !=[]:
@@ -1436,11 +1465,12 @@ elif choose == "Show map":
                 choice_depth_year = 0.0
 
         ### EXTRACT FROM FILENAME
-        VAR_FULL = (path_file_year.split('/')[-1]).split('__')[0]
+        VAR_FULL = (os.path.split(path_file_year)[1]).split('__')[0]
         VAR = VAR_FULL.split("pfx")[-1]
         if "]" in VAR:
             VAR = VAR.split("]")[-1]
 
+        ################ TO ADAPT ################
         # Get var name and unit
         with open("./variables.json","r") as f:
             json_dict = json.load(f)

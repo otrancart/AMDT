@@ -19,41 +19,33 @@ from qgis.core import (
     QgsProcessingFeedback
 )
 
-if '/docs' not in os.getcwd():
-    with open("./options.json","r") as f:
-            json_dict = json.load(f)
-    # Supply path to qgis install location
-    QgsApplication.setPrefixPath(json_dict["qgis_path"], True)
-    # Append the path where processing plugin can be found
-    sys.path.append(json_dict["proc_path"])
+################ TO ADAPT ################
+with open("./options.json","r") as f:
+    json_dict = json.load(f)
+# Supply path to qgis install location
+QgsApplication.setPrefixPath(json_dict["qgis_path"], True)
 
-    # Create a reference to the QgsApplication.  
-    # Setting the second argument to False disables the GUI.
-    qgs = QgsApplication([], False)
+# Create a reference to the QgsApplication.  
+# Setting the second argument to False disables the GUI.
+qgs = QgsApplication([], False)
 
-
-    from qgis import processing
-
-    from qgis.analysis import QgsZonalStatistics
-    from qgis.analysis import QgsNativeAlgorithms
+from qgis.analysis import QgsNativeAlgorithms
+from osgeo import gdal
+gdal.PushErrorHandler('CPLQuietErrorHandler')
+# hide ERROR 6: The PNG driver does not support update access to existing datasets.
 
 
-    from osgeo import gdal
-    gdal.PushErrorHandler('CPLQuietErrorHandler')
-    # hide ERROR 6: The PNG driver does not support update access to existing datasets.
+### START QGIS ###
+qgs.initQgis()
 
+# Append the path where processing plugin can be found
+sys.path.append(json_dict["proc_path"])
+import processing 
+from processing.core.Processing import Processing
+Processing.initialize()
+QgsApplication.processingRegistry().addProvider(QgsNativeAlgorithms())
 
-    ### START QGIS ###
-    qgs.initQgis()
-
-    sys.path.append(json_dict["proc_path"])
-        
-    import processing 
-    from processing.core.Processing import Processing
-    Processing.initialize()
-    QgsApplication.processingRegistry().addProvider(QgsNativeAlgorithms())
-
-    # qgs.exitQgis()
+# qgs.exitQgis()
 
 
 ##################
@@ -81,10 +73,11 @@ def add_layer(BDIR:str,FILEPATH:str,vlayer=False):
         QgsProject.instance().addMapLayer(vlayer)
         return vlayer
     
-    SERVICE = FILEPATH.split("/")[-2]
-    NAME = FILEPATH.split("/")[-1]
+    S,NAME = os.path.split(FILEPATH)
+    SERVICE = os.path.split(S)[1]
+    
 
-    path = BDIR+"/Layers/"+SERVICE
+    path = os.path.join(BDIR,"Layers",SERVICE)
     if not os.path.exists(path):
         os.mkdir(path)
 
@@ -116,8 +109,8 @@ def run_qgis_analysis(BDIR:str,FILEPATH:str,STATS:list,TIMERANGE:str):
     """
     LAYER = add_layer(str(BDIR),str(FILEPATH))
 
-    SERVICE = str(LAYER.dataProvider().dataSourceUri()).split("/")[-2]
-    NAME = str(LAYER.dataProvider().dataSourceUri()).split("/")[-1]
+    S,NAME = os.path.split(LAYER.dataProvider().dataSourceUri())
+    SERVICE = os.path.split(S)[1]
     bandcount = LAYER.bandCount()
     
     # Get depth dimension

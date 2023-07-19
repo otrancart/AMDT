@@ -1,7 +1,7 @@
 # Aristarchus the MarineDataTrawler
 Developed by [Archipelagos](https://archipelago.gr/en/)
 
-
+Satellite marine environmental data | Trends | Correlation with marine mammals | Maps
 
 ## Installation
 
